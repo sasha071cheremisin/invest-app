@@ -6,10 +6,14 @@ class Candles {
 	static async update(companyName, candles) {
 		const list = await Candles.getAll();
 
-		list[companyName].candles.push(...candles);
-		list[companyName].candles = list[companyName].candles.sort((a, b) => {
+		const listCompanyCandles = [...list[companyName].candles];
+		listCompanyCandles.push(...candles);
+
+		const newArr = listCompanyCandles.sort((a, b) => {
 			return moment(a.time).unix() - moment(b.time).unix();
 		})
+
+		list[companyName].candles = newArr;
 
 		return new Promise((resolve, reject) => {
 			fs.writeFile(
